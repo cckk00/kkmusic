@@ -6,7 +6,25 @@ let pauseImg = require('../images/pause.png');
 
 let playImg  = require('../images/play.png');
 
+let like = require('../images/like.png');
+
+let like1 = require('../images/like1.png');
+
+let like_active = require('../images/like_active.png');
+
+let deleteImg = require('../images/delete.png');
+
+let favicon = require('../images/favicon.ico');
+
+let modeIcons = {
+  liebiao: require('../images/liebiao.png'),
+  random: require('../images/random.png'),
+  danqu_32: require('../images/danqu_32.png')
+};
+
 $(function () {
+
+  $('#favicon').attr('href', favicon);
   
   //初始化最近播放，收藏数据结构
   function initSongConstruct() {
@@ -27,11 +45,11 @@ $(function () {
 
   //获取进度条的总长度
   var progressWidth = $('.progress').width();
-  // console.log('progressWidth ==> ', progressWidth);
+  // 
 
   //获取滑块的宽度
   var maskWidth = $('.mask').width();
-  // console.log('maskWidth ==> ', maskWidth);
+  // 
 
   //mask最小left
   var minLeft = 0;
@@ -52,7 +70,7 @@ $(function () {
     var src = $(audio).attr('src');
 
     if (!src) {
-      console.log('音频没有就绪');
+      
       return;
     }
 
@@ -248,9 +266,9 @@ $(function () {
       type: 'get',
       url: url,
       success: function (data) {
-        // console.log('data ==> ', data);
+        // 
         var lrcData = data.split('\n[');
-        // console.log('lrcData ==> ', lrcData);
+        // 
         
         // var lrcs = [];
         for (var i = 0; i < lrcData.length; i++) {
@@ -270,7 +288,6 @@ $(function () {
             continue;
           }
 
-          // var lrc = {};
           //将时间转换为秒
           var times = currentLrc[0].split(':');
           var minute = parseFloat(times[0]);
@@ -281,18 +298,12 @@ $(function () {
 
           $('.song-word-list').append($li);
 
-          // lrc.time = Number((minute * 60 + second).toFixed(2));
-          
 
-          // lrc.text = currentLrc[1];
-
-          // lrcs.push(lrc);
         }
 
-        // console.log('lrcs ==> ', lrcs);
       },
       error: function (err) {
-        console.log('找不到歌词');
+        
       }
     })
   }
@@ -300,13 +311,13 @@ $(function () {
   //当音频播放时
   audio.onplay = function () {
 
-    console.log('歌曲首次播放 isFirstPlay ==> ', isFirstPlay);
+    
 
     //当前歌曲首次播放
     if (isFirstPlay) {
       //获取音频总时间
       duration = this.duration;
-      console.log('duration ==> ', duration);
+      
       isFirstPlay = false;
 
       var t = formatTime(duration);
@@ -321,18 +332,18 @@ $(function () {
       //判断当前歌曲是否被收藏
       var isHas = false;
       var likeSong = JSON.parse(localStorage.getItem('likeSong'));
-      // console.log('likeSong ==> ', likeSong);
+      // 
       $.each(likeSong, function () {
         if (this.id == songId) {
-          console.log('aaa');
+          
           isHas = true;
-          $('.collection>img').attr('src', baseUrl + 'like_active.png');
+          $('.collection>img').attr('src', like_active);
           return false;
         }
       })
 
       if (!isHas) {
-        $('.collection>img').attr('src', baseUrl + 'like1.png');
+        $('.collection>img').attr('src', like1);
       }
 
       $('.song-word-list').empty().css({
@@ -343,10 +354,10 @@ $(function () {
 
       //获取歌词
       var songLrcUrl = $('.song-list-item.active').eq(0).data('lrc');
-      // console.log('songLrcUrl ==> ', songLrcUrl);
+      // 
       getSongWord(songLrcUrl);
 
-      console.log('绑定歌词');
+      
 
 
       for (var i = 0; i < recentSong.length; i++) {
@@ -411,18 +422,18 @@ $(function () {
 
     //移动歌词
     var $lis = $('.song-word-list>li');
-    // console.log('$lis ==> ', $lis);
+    // 
 
     for (var i = moveIndex; i < $lis.length; i++) {
 
        //获取当前li的data-time
        var currentLiTime = $($lis[i]).data('time');
-      //  console.log('currentLiTime ==> ', currentLiTime);
+      //  
 
-      //  console.log('currentTime ==> ', currentTime);
+      //  
  
        if (currentLiTime > currentTime) {
-        //  console.log('还没有开始唱');
+        //  
          break;
        }
 
@@ -432,16 +443,16 @@ $(function () {
        //判断nextLiTime是否存在，如果不存在则赋值最大值
        nextLiTime = nextLiTime === undefined ? Number.MAX_VALUE : nextLiTime;
 
-      //  console.log('nextLiTime ==> ', nextLiTime);
+      //  
 
       if (currentLiTime <= currentTime && nextLiTime > currentTime) {
-        // console.log('播放歌词');
+        // 
 
         //播放当前一句歌词
         //获取当前歌词的top
         var $songWordList = $('.song-word-list');
         var top = $songWordList.position().top;
-        // console.log('top ==> ', top);
+        // 
         $songWordList.animate({
           top: top - 40
         }, 150)
@@ -449,8 +460,8 @@ $(function () {
         //获取当前li宽度，span的宽度
         var liWidth = $($lis[i]).width();
         var spanWidth = $($lis[i]).find('span').width();
-        // console.log('liWidth ==> ', liWidth);
-        // console.log('spanWidth ==> ', spanWidth);
+        // 
+        // 
 
         if (spanWidth > liWidth) {
           $($lis[i]).find('span').animate({
@@ -506,7 +517,7 @@ $(function () {
   function changeProgress(e) {
     //获取相对目标元素的鼠标坐标
     var x = e.offsetX;
-    // console.log('x ==> ', x);
+    // 
 
     //让鼠标在滑块中间位置
     var left = x - maskWidth / 2;
@@ -535,7 +546,7 @@ $(function () {
     }
 
     if (!isDown) {
-      console.log('动态设置歌词的位置');
+      
 
       var $lis = $('.song-word-list>li');
 
@@ -544,9 +555,9 @@ $(function () {
 
         //获取当前li的data-time
         var currentLiTime = $(this).data('time');
-        console.log('currentLiTime ==> ', currentLiTime);
+        
 
-        console.log('audioTime ==> ', audioTime);
+        
 
         //如果是一个且第一个的时间大于当前音频播放时间，则返回第一个li
         if (i == 0 && currentLiTime > audioTime) {
@@ -560,11 +571,11 @@ $(function () {
 
         //获取下一个li的data-time
         var nextLiTime = $(this).next().data('time');
-        console.log('nextLiTime ==> ', nextLiTime);
+        
 
         if (currentLiTime <= audioTime && nextLiTime > audioTime) {
           moveIndex = i;
-          console.log('moveIndex ==> ', moveIndex);
+          
           $('.song-word-list').css({
             top: 200 - i * 40 + 'px'
           })
@@ -624,7 +635,7 @@ $(function () {
   //当前音频可以播放时
   audio.oncanplay = function () {
 
-    console.log('oncanplay可以播放了');
+    
 
     //播放
     this.play();
@@ -682,7 +693,7 @@ $(function () {
       songData = data;
     }
 
-    console.log('songData ==> ', songData);
+    
 
     var dataIndex = $('.aside-nav>div.active').data('index');
 
@@ -717,10 +728,10 @@ $(function () {
               <div class="t">${formatTime(this.time)}</div>
               <div class="icons">
                 <span class="like ${dataIndex == 'likeSong' ? 'not' : ''}" data-like="${isHas ? 1 : 0}">
-                  <img class="auto-img" src="./images/${isHas ? 'like_active' : 'like'}.png" />
+                  <img class="auto-img" src="${isHas ? like_active : like}" />
                 </span>
                 <span class="delete ${dataIndex == 'hotSong' ? 'not' : ''}">
-                  <img class="auto-img" src="./images/delete.png" />
+                  <img class="auto-img" src="${deleteImg}" />
                 </span>
               </div>
             </div>
@@ -746,7 +757,7 @@ $(function () {
     if (hotSong) {
       defaltSongs = JSON.parse(hotSong);
       createSongList(defaltSongs, countDatas.hotCount);
-      console.log('从缓存获取 defaltSongs ==> ', JSON.stringify(defaltSongs));
+      
       return;
     }
 
@@ -766,7 +777,7 @@ $(function () {
       //请求成功后执行的回调函数
       success: function (data) {
         //data: 服务器响应的数据
-        // console.log('data ==> ', data);
+        // 
 
         //保存音乐歌单
         defaltSongs = data.data.concat();
@@ -831,17 +842,17 @@ $(function () {
   var modes = [{
       name: 0,
       title: '列表循环',
-      url: 'liebiao.png'
+      url: modeIcons.liebiao
     },
     {
       name: 1,
       title: '随机播放',
-      url: 'random.png'
+      url: modeIcons.random
     },
     {
       name: 2,
       title: '单曲循环',
-      url: 'danqu_32.png'
+      url: modeIcons.danqu_32
     }
   ];
 
@@ -863,9 +874,9 @@ $(function () {
     //获取下一个播放模式
     var nextMode = modes[name];
 
-    $(this).attr('name', nextMode.name).attr('title', nextMode.title).find('img').attr('src', baseUrl + nextMode.url);
+    $(this).attr('name', nextMode.name).attr('title', nextMode.title).find('img').attr('src', nextMode.url);
 
-    // console.log('nextMode ==> ', nextMode);
+    // 
 
   })
 
@@ -879,21 +890,21 @@ $(function () {
 
     //获取dataIndex
     var dataIndex = $(this).data('index');
-    // console.log('dataIndex ==> ', dataIndex);
+    // 
 
     //根据dataIndex获取歌曲数据
     var currentSongData = JSON.parse(localStorage.getItem(dataIndex));
 
-    // console.log('currentSongData ==> ', currentSongData);
+    // 
 
     //获取截取歌曲数量标识
     var currentSongCount = $(this).data('count');
 
-    // console.log('currentSongCount ==> ', currentSongCount);
+    // 
 
     //获取当前歌曲列表歌曲数量
     var counts = $('#' + dataIndex + '>.song-list-item').length;
-    // console.log('counts ==> ', counts);
+    // 
 
     //排除创建热门歌曲
     if (currentSongCount != 'hotCount') {
@@ -902,7 +913,7 @@ $(function () {
 
       var songId = $('.song-list-item.active').eq(0).attr('id');
 
-      console.log('songId ==> ', songId);
+      
 
       $('[data-songid="' + songId + '"]:not(.active)').addClass('active');
 
@@ -920,11 +931,11 @@ $(function () {
     //0: 没有收藏，1：已经收藏
     var dataLike = $(this).data('like');
 
-    // console.log('dataLike ==> ', dataLike);
+    // 
 
     //获取歌曲id
     var songId = $(this).parents('.song-list-item').attr('id');
-    // console.log('songId ==> ', songId);
+    // 
 
     //获取收藏歌曲
     var likeSong = JSON.parse(localStorage.getItem('likeSong'));
@@ -932,7 +943,7 @@ $(function () {
     //获取热门歌曲、最近播放、收藏歌曲
     var $songLikes = $('.song-list-item[data-songid="' + songId + '"]');
 
-    // console.log('$songLikes ==> ',  $songLikes);
+    // 
 
     //获取正在播放歌曲的id
     var playingSongId = $('#play-pause').attr('name');
@@ -947,7 +958,7 @@ $(function () {
       $songLikes.each(function () {
         // var like = $(this).find('.like').data('like');
 
-        $(this).find('.like').data('like', 1).find('img').attr('src', baseUrl + 'like_active.png');
+        $(this).find('.like').data('like', 1).find('img').attr('src', like_active);
        
       })
 
@@ -966,17 +977,15 @@ $(function () {
 
 
       if (playingSongId == songId) {
-        $('.collection>img').attr('src', baseUrl + 'like_active.png');
+        $('.collection>img').attr('src', like_active);
       }
 
     } else {
       //取消收藏
-      // $(this).data('like', 0).find('img').attr('src', baseUrl + 'like.png');
 
       $songLikes.each(function () {
-        // var like = $(this).find('.like').data('like');
 
-        $(this).find('.like').data('like', 0).find('img').attr('src', baseUrl + 'like.png');
+        $(this).find('.like').data('like', 0).find('img').attr('src', like);
        
       })
 
@@ -998,7 +1007,7 @@ $(function () {
 
 
       if (playingSongId == songId) {
-        $('.collection>img').attr('src', baseUrl + 'like1.png');
+        $('.collection>img').attr('src', like1);
       }
 
     }
@@ -1061,10 +1070,10 @@ $(function () {
     })
 
     //移除最近播放以及热门歌曲收藏显示
-    $('.song-list-item[data-songid="' + songId + '"]').find('.like').data('like', 0).find('img').attr('src', baseUrl + 'like.png');
+    $('.song-list-item[data-songid="' + songId + '"]').find('.like').data('like', 0).find('img').attr('src', like);
 
 
-    $('.collection>img').attr('src', baseUrl + 'like1.png');
+    $('.collection>img').attr('src', like1);
     
 
   })
@@ -1076,7 +1085,7 @@ $(function () {
     var songId = $('#play-pause').attr('name');
 
     if (!songId) {
-      console.log('当前没有播放歌曲');
+      
       return;
     }
 
@@ -1090,15 +1099,15 @@ $(function () {
         $('#likeSong>.song-list-item.active').remove();
         likeSong.splice(i, 1);
         localStorage.setItem('likeSong', JSON.stringify(likeSong));
-        $(this).find('img').attr('src', baseUrl + 'like1.png');
+        $(this).find('img').attr('src', like1);
 
         //移除热门歌曲、最近播放的收藏
 
         var $likes = $('.song-list-item.active').find('.like');
 
-        // console.log('$likes ==> ', $likes);
+        // 
 
-        $likes.data('like', 0).find('img').attr('src', baseUrl + 'like.png');
+        $likes.data('like', 0).find('img').attr('src', like);
 
         return;
       }
@@ -1107,11 +1116,11 @@ $(function () {
 
     //收藏歌曲
     var $songActive = $('.song-list-item.active');
-    console.log('$songActive ==> ', $songActive);
+    
 
-    $songActive.find('.like').data('like', 1).find('img').attr('src', baseUrl + 'like_active.png');
+    $songActive.find('.like').data('like', 1).find('img').attr('src', like_active);
 
-    $(this).find('img').attr('src', baseUrl + 'like_active.png');
+    $(this).find('img').attr('src', like_active);
 
     //保存收藏歌曲数据
     //获取所有歌曲
@@ -1179,7 +1188,7 @@ $(function () {
 
       //获取当前的滚动距离
       var scrollTop = $(self).scrollTop();
-      // console.log('scrollTop ==> ', scrollTop);
+      // 
 
       //获取当前所有热门歌曲列表的总高度
       var $allLis = $(self).find('.song-list-item');
@@ -1187,7 +1196,7 @@ $(function () {
       var allLisHeight = $allLis.eq(0).outerHeight() * $allLis.length;
 
       if (songListHeight + scrollTop >= allLisHeight) {
-        console.log('触发加载');
+        
         createSongList(defaltSongs, countDatas.hotCount);
       }
 

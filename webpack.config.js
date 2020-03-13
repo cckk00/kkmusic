@@ -19,7 +19,26 @@ let htmlWebpackPlugin = new HtmlWebpackPlugin({
   filename: 'index.html'
 });
 
+//压缩css
+let OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+//压缩js
+let TerserJSPlugin = require('terser-webpack-plugin');
+
+//压缩css实例
+let optimizeCSSAssetsPlugin = new OptimizeCSSAssetsPlugin({});
+
+//压缩JS实例
+let terserJSPlugin = new TerserJSPlugin({});
+
 module.exports = {
+
+  //优化项
+  optimization: {
+
+    //压缩
+    minimizer: [terserJSPlugin, optimizeCSSAssetsPlugin]
+  },
 
   mode: 'production',
 
@@ -43,7 +62,7 @@ module.exports = {
       },
 
       {
-        test: /\.(png|gif|jpg|jpeg|webp)$/,
+        test: /\.(png|gif|jpg|jpeg|webp|ico)$/,
         use: [
           {
             loader: 'url-loader',
